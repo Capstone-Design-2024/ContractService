@@ -43,7 +43,7 @@ const routePath = path.join(__dirname, "routes");
 fs.readdirSync(routePath).forEach((file) => {
   if (file.endsWith(".ts")) {
     const router = require(path.join(routePath, file)).default;
-    app.use("/", router);
+    app.use(`/${file.split(".")[0]}`, router);
   }
 });
 

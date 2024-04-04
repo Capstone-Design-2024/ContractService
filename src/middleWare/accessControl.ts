@@ -19,8 +19,8 @@ const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     const queryResult: any = await conn.execute(
-      "SELECT * FROM user_auth_info WHERE id = ?",
-      [req.decoded.id]
+      "SELECT * FROM member_cached WHERE email = ?",
+      [req.decoded.email]
     );
     const DBSearchResult: any = queryResult[0][0] as any;
 

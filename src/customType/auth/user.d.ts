@@ -1,10 +1,17 @@
 export interface UserAuthInfo {
+  name: string;
   email: string;
   pwd: string;
-  nick_name: string;
+  address: string;
+  profile_url: string;
+  member_id: number;
 }
 
 export interface UserSignInInfo {
   email: string;
   pwd: string;
+}
+
+export interface UserInfo {
+  member_id: number;
 }
