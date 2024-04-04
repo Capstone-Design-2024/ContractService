@@ -28,7 +28,7 @@ class ERC20Contract {
         [contractFactoryName, network]
       )
     )[0] as ContractMetaInfo[];
-    if (contractInfo.length != 1) {
+    if (contractInfo.length > 1) {
       throw new Error("동일한 이름의 Contract가 동일한 네트워크에 존재합니다.");
     }
     return contractInfo[0];

@@ -1,7 +1,7 @@
 export interface UserAuthInfo {
   name: string;
   email: string;
-  pwd: string;
+  password: string;
   address: string;
   profile_url: string;
   member_id: number;
@@ -9,7 +9,7 @@ export interface UserAuthInfo {
 
 export interface UserSignInInfo {
   email: string;
-  pwd: string;
+  password: string;
 }
 
 export interface UserInfo {
