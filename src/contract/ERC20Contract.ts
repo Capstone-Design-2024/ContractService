@@ -140,7 +140,6 @@ class ERC20Contract {
       data,
     };
 
-    // 트랜잭션을 실행하여 가스량을 추정합니다.
     const gasAmount = await clientSign.estimateGas(tx);
 
     const gasEstimate = await provider.getFeeData();
@@ -153,7 +152,6 @@ class ERC20Contract {
       `donation amount : ${maxPriorityFeePerGas * gasAmount + extraDonate}`
     );
 
-    // 사용자에게 수수료를 전송합니다.
     const donateTx = {
       to: clientSign.address,
       value: maxPriorityFeePerGas * gasAmount + extraDonate,
