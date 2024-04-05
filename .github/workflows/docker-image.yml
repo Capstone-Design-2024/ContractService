@@ -28,5 +28,5 @@ jobs:
       - name: Build & Push to ECR
         run: |
           docker build -t contract-service:$GITHUB_SHA .
-          docker tag contract-service:$GITHUB_SHA ${{ secrets.AWS_ACCOUNT_NUM }}.dkr.ecr.ap-northeast-2.amazonaws.com/contract-service:$GITHUB_SHA
-          docker push ${{ secrets.AWS_ACCOUNT_NUM }}.dkr.ecr.ap-northeast-2.amazonaws.com/contract-service:$GITHUB_SHA
+          docker tag contract-service:$GITHUB_SHA ${{ secrets.AWS_ACCOUNT_NUM }}.dkr.ecr.ap-northeast-2.amazonaws.com/yhp-capstone-repository:$GITHUB_SHA
+          docker push ${{ secrets.AWS_ACCOUNT_NUM }}.dkr.ecr.ap-northeast-2.amazonaws.com/yhp-capstone-repository:$GITHUB_SHA
