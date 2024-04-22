@@ -7,7 +7,7 @@ import session from "express-session";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import fs from "fs";
-
+import { signupEventConsumer } from "./service/kafka/consumer/signupEventConsumer";
 dotenv.config();
 
 const app: Express = express();
@@ -46,6 +46,8 @@ fs.readdirSync(routePath).forEach((file) => {
     app.use(`/${file.split(".")[0]}`, router);
   }
 });
+
+signupEventConsumer();
 
 // catch 404 and forward to error handler
 app.use(function (req: Request, res: Response, next: NextFunction) {
