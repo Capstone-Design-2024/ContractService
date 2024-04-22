@@ -15,12 +15,12 @@ const createHashedPassword = (password: string) => {
 export const signup = async (req: Request, res: Response) => {
   try {
     const now = moment().format("YYYY-M-D H:m:s");
-    const { name, email, password, address, profile_url, member_id } =
+    const { name, email, password, address, profile_url, member_id, role } =
       req.body as UserAuthInfo;
 
     const hashedPwd = createHashedPassword(password);
     await conn.execute(
-      "INSERT INTO member_cached VALUES (?,?,?,?,?,?,?,?,?,?)",
+      "INSERT INTO member_cached VALUES (?,?,?,?,?,?,?,?,?,?,?)",
       [
         null,
         name,
@@ -32,6 +32,7 @@ export const signup = async (req: Request, res: Response) => {
         now,
         now,
         3,
+        role,
       ]
     );
 
@@ -64,7 +65,7 @@ export const signin = async (req: Request, res: Response) => {
       { member_id: user.member_id, email: user.email, name: user.name },
       process.env.SECRET as string,
       {
-        expiresIn: "1h", // 토큰 만료 시간 설정
+        expiresIn: process.env.TOKEN_EXPIRE, // 토큰 만료 시간 설정
       }
     );
 

@@ -5,6 +5,7 @@ export interface UserAuthInfo {
   address: string;
   profile_url: string;
   member_id: number;
+  role: string;
 }
 
 export interface UserSignInInfo {

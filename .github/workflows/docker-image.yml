@@ -25,6 +25,10 @@ jobs:
       - name: Login to ECR
         uses: aws-actions/amazon-ecr-login@v1
 
+      - name: Remove existing image from ECR
+        run: |
+          aws ecr batch-delete-image --repository-name yhp-capstone-repository --image-ids imageTag=contract-service || true
+
       - name: Build & Push to ECR
         run: |
           docker build -t contract-service .
