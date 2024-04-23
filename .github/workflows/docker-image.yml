@@ -32,5 +32,7 @@ jobs:
       - name: Build & Push to ECR
         run: |
           docker build -t contract-service .
-          docker tag contract-service ${{ secrets.AWS_ACCOUNT_NUM }}.dkr.ecr.ap-northeast-2.amazonaws.com/yhp-capstone-repository:contract-service
-          docker push ${{ secrets.AWS_ACCOUNT_NUM }}.dkr.ecr.ap-northeast-2.amazonaws.com/yhp-capstone-repository:contract-service
+          TIMESTAMP=$(date +%s)
+          IMAGE_TAG="${{ secrets.AWS_ACCOUNT_NUM }}.dkr.ecr.ap-northeast-2.amazonaws.com/yhp-capstone-repository:contract-service-${TIMESTAMP}"
+          docker tag contract-service $IMAGE_TAG
+          docker push $IMAGE_TAG
