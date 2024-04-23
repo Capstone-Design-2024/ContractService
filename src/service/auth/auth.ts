@@ -8,9 +8,9 @@ import jwt from "jsonwebtoken";
 moment.tz.setDefault("Asia/Seoul");
 const conn = sqlCon();
 
-const createHashedPassword = (password: string) => {
-  return crypto.createHash("sha512").update(password).digest("base64");
-};
+// const createHashedPassword = (password: string) => {
+//   return crypto.createHash("sha512").update(password).digest("base64");
+// };
 
 export const signup = async (req: Request, res: Response) => {
   try {
@@ -18,14 +18,14 @@ export const signup = async (req: Request, res: Response) => {
     const { name, email, password, address, profile_url, member_id, role } =
       req.body as UserAuthInfo;
 
-    const hashedPwd = createHashedPassword(password);
+    // const hashedPwd = createHashedPassword(password);
     await conn.execute(
       "INSERT INTO member_cached VALUES (?,?,?,?,?,?,?,?,?,?,?)",
       [
         null,
         name,
         email,
-        hashedPwd,
+        password,
         address,
         profile_url,
         member_id,
@@ -48,7 +48,7 @@ export const signup = async (req: Request, res: Response) => {
 export const signin = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body as UserSignInInfo;
-    const hashedPwd = createHashedPassword(password);
+    // const hashedPwd = createHashedPassword(password);
     const users: UserAuthInfo[] = (
       await conn.execute(
         "SELECT email, member_id, password, name FROM member_cached WHERE email=?",
@@ -60,7 +60,7 @@ export const signin = async (req: Request, res: Response) => {
 
     if (!user) return res.status(404).json(notFound);
 
-    if (user.password != hashedPwd) return res.status(401).json(unAuthorized);
+    if (user.password != password) return res.status(401).json(unAuthorized);
     const token = jwt.sign(
       { member_id: user.member_id, email: user.email, name: user.name },
       process.env.SECRET as string,
