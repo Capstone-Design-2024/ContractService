@@ -2,15 +2,10 @@ import { Request, Response } from "express";
 import { badRequest, notFound, unAuthorized } from "../../status/false";
 import { UserAuthInfo, UserSignInInfo } from "../../customType/auth/user";
 import sqlCon from "../../../database/sqlCon";
-import crypto from "crypto";
 import moment from "moment-timezone";
 import jwt from "jsonwebtoken";
 moment.tz.setDefault("Asia/Seoul");
 const conn = sqlCon();
-
-// const createHashedPassword = (password: string) => {
-//   return crypto.createHash("sha512").update(password).digest("base64");
-// };
 
 export const signup = async (req: Request, res: Response) => {
   try {
@@ -62,7 +57,7 @@ export const signin = async (req: Request, res: Response) => {
 
     if (user.password != password) return res.status(401).json(unAuthorized);
     const token = jwt.sign(
-      { member_id: user.member_id, email: user.email, name: user.name },
+      { ID: user.member_id, sub: user.email, name: user.name },
       process.env.SECRET as string,
       {
         expiresIn: process.env.TOKEN_EXPIRE, // 토큰 만료 시간 설정

@@ -26,7 +26,7 @@ const createWallet = async (mnemonic: string) => {
 export const walletGenerate = async (req: Request, res: Response) => {
   try {
     const now = moment().format("YYYY-M-D H:m:s");
-    const member_id = req.decoded.member_id;
+    const member_id = req.decoded.ID;
 
     let { mnemonic } = req.body as WalletGenerationInfo;
     if (!mnemonic) {
@@ -84,13 +84,16 @@ export const walletGenerate = async (req: Request, res: Response) => {
 export const getWalletAddress = async (req: Request, res: Response) => {
   try {
     const token = req.decoded;
-    const member_id = token.member_id;
+    const member_id = token.ID;
     const existingWallet: WalletInfo[] = (
       await conn.execute(
         "SELECT wallet_address FROM wallet WHERE member_id = ?",
         [member_id]
       )
     )[0] as WalletInfo[];
+    if (existingWallet.length === 0) {
+      throw new Error(badRequest.toString());
+    }
     return res.status(200).json({
       existingWallet: existingWallet[0],
     });

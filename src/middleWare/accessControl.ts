@@ -7,7 +7,6 @@ const conn = sqlCon();
 
 const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    console.log(req.headers.authorization);
     req.decoded = jwt.verify(
       (req.headers.authorization as string).replace(/^Bearer\s/, ""),
       process.env.SECRET as string
@@ -21,7 +20,7 @@ const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
 
     const queryResult: any = await conn.execute(
       "SELECT * FROM member_cached WHERE email = ?",
-      [req.decoded.email]
+      [req.decoded.sub]
     );
     const DBSearchResult: any = queryResult[0][0] as any;
 
