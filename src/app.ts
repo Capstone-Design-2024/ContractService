@@ -8,6 +8,7 @@ import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import fs from "fs";
 import { signupEventConsumer } from "./service/kafka/consumer/signupEventConsumer";
+import cors from "cors";
 dotenv.config();
 
 const app: Express = express();
@@ -26,6 +27,8 @@ app.use(
     },
   })
 );
+
+app.use(cors());
 
 // for postman
 app.use(

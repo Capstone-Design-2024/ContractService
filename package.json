@@ -25,6 +25,7 @@
     "chokidar": "^3.6.0",
     "concat-map": "^0.0.1",
     "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "create-require": "^1.1.1",
     "crypto": "^1.0.1",
     "debug": "^3.2.7",
@@ -74,6 +75,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/node": "^20.11.30",
     "nodemon": "^3.1.0",
