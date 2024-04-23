@@ -7,6 +7,7 @@ const conn = sqlCon();
 
 const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    console.log(req.headers.authorization);
     req.decoded = jwt.verify(
       (req.headers.authorization as string).replace(/^Bearer\s/, ""),
       process.env.SECRET as string
