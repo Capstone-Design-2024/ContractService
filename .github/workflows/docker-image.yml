@@ -45,6 +45,7 @@ jobs:
 
       - name: Trigger Kustomize Repository Workflow
         run: |
+          echo ${TIMESTAMP}
           curl -X POST -u "Capstone-Design-2024:${{ secrets.G_TOKEN }}" \
           -H "Accept: application/vnd.github.v3+json" \
           https://api.github.com/repos/Capstone-Design-2024/Manifest/dispatches \
