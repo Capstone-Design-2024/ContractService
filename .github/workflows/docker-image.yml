@@ -1,4 +1,4 @@
-name: Docker Image ITM_BLOCK_CHAIN_SERVICE CI
+name: Docker Image CAPSTONE_CONTRACT_SERVICE CI
 
 on:
   push:
