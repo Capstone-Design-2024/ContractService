@@ -29,16 +29,25 @@ jobs:
         run: |
           aws ecr batch-delete-image --repository-name yhp-capstone-repository --image-ids imageTag=contract-service || true
 
+      - name: Set timestamp
+        id: vars
+        run: echo "TIMESTAMP=$(date +%s)" >> $GITHUB_ENV
+
       - name: Build & Push to ECR
         run: |
           docker build -t contract-service .
-          TIMESTAMP=$(date +%s)
+
           IMAGE_TAG="${{ secrets.AWS_ACCOUNT_NUM }}.dkr.ecr.ap-northeast-2.amazonaws.com/yhp-capstone-repository:contract-service-${TIMESTAMP}"
           docker tag contract-service $IMAGE_TAG
           docker push $IMAGE_TAG
+        env:
+          TIMESTAMP: ${{ env.TIMESTAMP }}
+
       - name: Trigger Kustomize Repository Workflow
         run: |
           curl -X POST -u "Capstone-Design-2024:${{ secrets.G_TOKEN }}" \
           -H "Accept: application/vnd.github.v3+json" \
           https://api.github.com/repos/Capstone-Design-2024/Manifest/dispatches \
           -d '{"event_type": "update-image-tag", "client_payload": {"image_tag": "contract-service-${TIMESTAMP}"}}'
+        env:
+          TIMESTAMP: ${{ env.TIMESTAMP }}
