@@ -36,3 +36,9 @@ jobs:
           IMAGE_TAG="${{ secrets.AWS_ACCOUNT_NUM }}.dkr.ecr.ap-northeast-2.amazonaws.com/yhp-capstone-repository:contract-service-${TIMESTAMP}"
           docker tag contract-service $IMAGE_TAG
           docker push $IMAGE_TAG
+      - name: Trigger Kustomize Repository Workflow
+        run: |
+          curl -X POST -u "lopahn2:${{ secrets.GITHUB_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/Capstone-Design-2024/Manifest.git/dispatches \
+          -d '{"event_type": "update-image-tag", "client_payload": {"image_tag": "contract-service-${TIMESTAMP}"}}'
