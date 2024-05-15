@@ -25,7 +25,7 @@ const erc20ContractInstance: ERC20Contract = ERC20Contract.getInstance(
 export const mintPPToken = async (req: Request, res: Response) => {
   try {
     const { wallet_address } = req.body as WalletInfo;
-    const member_id: number = req.decoded.member_id;
+    const member_id: number = req.decoded.ID;
 
     const [userData]: any[] = await conn.execute(
       "SELECT charge_count FROM member_cached WHERE member_id = ?",
