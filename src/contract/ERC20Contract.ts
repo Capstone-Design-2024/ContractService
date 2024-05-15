@@ -1,7 +1,6 @@
-import { TransactionReceipt, ethers } from "ethers";
+import { TransactionReceipt, ethers, formatUnits } from "ethers";
 import { provider, adminSign } from "./provider/provider";
 import { ContractMetaInfo } from "../customType/contract/contract";
-
 import sqlCon from "../../database/sqlCon";
 const conn = sqlCon();
 
@@ -12,6 +11,7 @@ class ERC20Contract {
   private constructor(contractFactoryName: string, network: string) {
     this.getContractInfo(contractFactoryName, network).then(
       (contract: ContractMetaInfo) => {
+        console.log(contract.address);
         this.contract = new ethers.Contract(
           contract.address,
           contract.abi,
@@ -46,7 +46,7 @@ class ERC20Contract {
 
   async mint(recipient: string): Promise<TransactionReceipt | null> {
     const params = [recipient, process.env.PPT_MINT_AMOUNT];
-
+    console.log(params);
     const to = await this.contract?.getAddress();
     console.log(`Contract Address: ${to}`);
     const data = this.contract?.interface.encodeFunctionData("mint", params);
@@ -76,8 +76,7 @@ class ERC20Contract {
     return result.toString();
   }
 
-  async balanceOf(owner: string): Promise<number> {
-    // balanceOf 메서드 호출
+  async balanceOf(owner: string): Promise<any> {
     const result = await this.contract?.balanceOf(owner);
     console.log(`Address ${owner} balance is: ${result}`);
     return result.toString();

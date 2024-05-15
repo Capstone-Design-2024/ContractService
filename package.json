@@ -32,7 +32,7 @@
     "diff": "^4.0.2",
     "dotenv": "^16.4.5",
     "ethereumjs-wallet": "^1.0.2",
-    "ethers": "^6.11.1",
+    "ethers": "^6.12.1",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "fill-range": "^7.0.1",
