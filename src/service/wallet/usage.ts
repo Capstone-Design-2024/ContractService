@@ -4,6 +4,7 @@ import ERC20Contract from "../../contract/ERC20Contract";
 import sqlCon from "../../../database/sqlCon";
 import moment from "moment-timezone";
 import { WalletInfo } from "../../customType/wallet/wallet";
+import { ContractMetaInfo } from "../../customType/contract/contract";
 moment.tz.setDefault("Asia/Seoul");
 const conn = sqlCon();
 
@@ -55,5 +56,21 @@ export const getBalance = async (req: Request, res: Response) => {
   } catch (error: any) {
     console.log(error);
     return res.status(400).json(badRequestBlockChain(error.reason));
+  }
+};
+
+export const getContractInfo = async (req: Request, res: Response) => {
+  try {
+    const { contract_id } = req.body;
+    const contractMetaInfo: ContractMetaInfo[] = (
+      await conn.execute(
+        "SELECT address, contract_factory_name, abi FROM contract_info WHERE cnt_id = ?",
+        [contract_id]
+      )
+    )[0] as ContractMetaInfo[];
+    return res.status(200).json({ contractMetaInfo });
+  } catch (error: any) {
+    console.log(error);
+    return res.status(400).json(badRequest);
   }
 };
