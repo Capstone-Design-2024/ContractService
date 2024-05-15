@@ -14,7 +14,6 @@ jobs:
       - name: production env file setting
         run: |
           echo ${{ secrets.NODE_PROD_ENV }} | base64 --decode >> .env
-          echo ${{ secrets.NODE_PROD_ENV }} | base64 --decode
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
