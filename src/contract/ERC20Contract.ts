@@ -11,7 +11,6 @@ class ERC20Contract {
   private constructor(contractFactoryName: string, network: string) {
     this.getContractInfo(contractFactoryName, network).then(
       (contract: ContractMetaInfo) => {
-        console.log(contract.address);
         this.contract = new ethers.Contract(
           contract.address,
           contract.abi,
