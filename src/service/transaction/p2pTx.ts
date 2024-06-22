@@ -23,23 +23,23 @@ const erc20ContractInstance: ERC20Contract = ERC20Contract.getInstance(
 export const approveAndTx = async (req: Request, res: Response) => {
   try {
     const { from, to, amount } = req.body as TransactionFrom;
-    const member_id: number = req.decoded.member_id;
+    const member_id: number = req.decoded.ID;
 
     const [userWallet]: any[] = await conn.execute(
       "SELECT * FROM wallet WHERE member_id = ?",
       [member_id]
     );
 
-    if (userWallet[0].wallet_address != from) {
-      return res.status(401).json(notOwnerOfWallet);
-    }
+    // if (userWallet[0].wallet_address != from) {
+    //   return res.status(401).json(notOwnerOfWallet);
+    // }
 
     console.log("=======Approving Start=======");
     /**
      * FrontEnd에서 Provider 설정부터 clientSign까지만 설정할 수 있으면 Class만 가지고도 트랜잭션 가능
      */
     const provider = new ethers.JsonRpcProvider(
-      process.env.POLYGON_MUMBI_RPC_URL
+      process.env.POLYGON_AMOY_RPC_URL
     );
 
     const clientWallet = new ethers.Wallet(

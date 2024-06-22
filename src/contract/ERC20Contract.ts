@@ -130,6 +130,71 @@ class ERC20Contract {
     return receipt;
   }
 
+  async createProject(
+    title: string,
+    tokenURI: string,
+    makerAddress: string,
+    projectId: number,
+    price: number
+  ) {
+    const params = [title, tokenURI, makerAddress, projectId, price];
+    const ca = await this.contract?.getAddress();
+    console.log(`Contract Address: ${ca}`);
+
+    const data = this.contract?.interface.encodeFunctionData(
+      "createProject",
+      params
+    );
+
+    console.log(`Contract Caller Is Ready \n ${data}`);
+
+    const tx = {
+      to: ca,
+      data,
+    };
+
+    console.log(`========Transaction Start========`);
+    const signedTx = await adminSign.sendTransaction(tx);
+
+    const receipt = await signedTx.wait();
+    console.log(`========Transaction Finish========`);
+
+    return receipt;
+  }
+
+  async getProject(projectId: number) {
+    const result = await this.contract?.getProject(projectId);
+    console.log(`Proejct # ${projectId} meta-infomation below`);
+    console.log(`${result}`);
+    return result.toString();
+  }
+
+  async buyProject(projectId: number, payment: number) {
+    const params = [projectId, payment];
+    const ca = await this.contract?.getAddress();
+    console.log(`Contract Address: ${ca}`);
+
+    const data = this.contract?.interface.encodeFunctionData(
+      "buyProject",
+      params
+    );
+
+    console.log(`Contract Caller Is Ready \n ${data}`);
+
+    const tx = {
+      to: ca,
+      data,
+    };
+
+    console.log(`========Transaction Start========`);
+    const signedTx = await adminSign.sendTransaction(tx);
+
+    const receipt = await signedTx.wait();
+    console.log(`========Transaction Finish========`);
+
+    return receipt;
+  }
+
   private async estimateGasForClient(
     clientSign: ethers.Wallet,
     data: any,
