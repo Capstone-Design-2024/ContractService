@@ -70,7 +70,9 @@ class ERC20Contract {
   }
 
   async availableSupply(): Promise<number> {
-    const result = await this.contract?.balanceOf(process.env.ADMIN_WALLET_KEY);
+    const result = await this.contract?.balanceOf(
+      process.env.SUPERVISOR_WALLET_KEY
+    );
     console.log(`ERC20 Remain PPT balance is: ${result}`);
     return result.toString();
   }
@@ -82,7 +84,7 @@ class ERC20Contract {
   }
 
   async approve(clientSign: ethers.Wallet, amount: number): Promise<any> {
-    const params = [process.env.ADMIN_WALLET_KEY, amount];
+    const params = [process.env.SUPERVISOR_WALLET_KEY, amount];
     const ca = await this.contract?.getAddress();
     console.log(`Contract Address: ${ca}`);
 
