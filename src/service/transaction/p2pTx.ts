@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { badRequestBlockChain, notOwnerOfWallet } from "../../status/false";
 import ERC20Contract from "../../contract/ERC20Contract";
-import { TransactionFrom } from "../../customType/tx/tx";
+import { TransactionFrom, ApproveTxFrom } from "../../customType/tx/tx";
 import { ethers } from "ethers";
 import sqlCon from "../../../database/sqlCon";
 import moment from "moment-timezone";
@@ -19,7 +19,6 @@ const erc20ContractInstance: ERC20Contract = ERC20Contract.getInstance(
   CONTRACT_DEPLOYED_NETWORK
 );
 
-// 이 부분은 프론트엔드 부분
 export const approveAndTx = async (req: Request, res: Response) => {
   try {
     const { from, to, amount } = req.body as TransactionFrom;
@@ -30,9 +29,9 @@ export const approveAndTx = async (req: Request, res: Response) => {
       [member_id]
     );
 
-    // if (userWallet[0].wallet_address != from) {
-    //   return res.status(401).json(notOwnerOfWallet);
-    // }
+    if (userWallet[0].wallet_address != from) {
+      return res.status(401).json(notOwnerOfWallet);
+    }
 
     console.log("=======Approving Start=======");
     /**
@@ -65,6 +64,49 @@ export const approveAndTx = async (req: Request, res: Response) => {
     //   message: `성공적으로 PPT를 ${amount}만큼 Approve 했습니다.`,
     //   receipt,
     // });
+  } catch (error: any) {
+    console.log(error);
+    return res.status(400).json(badRequestBlockChain(error.reason));
+  }
+};
+
+export const approve = async (req: Request, res: Response) => {
+  try {
+    const { from, to, amount, clientWallet } = req.body as ApproveTxFrom;
+    const member_id: number = req.decoded.ID;
+
+    const [userWallet]: any[] = await conn.execute(
+      "SELECT * FROM wallet WHERE member_id = ?",
+      [member_id]
+    );
+
+    if (userWallet[0].wallet_address != from) {
+      return res.status(401).json(notOwnerOfWallet);
+    }
+
+    console.log("=======Approving Start=======");
+    // /**
+    //  * FrontEnd에서 Provider 설정부터 clientSign까지만 설정할 수 있으면 Class만 가지고도 트랜잭션 가능
+    //  */
+    const provider = new ethers.JsonRpcProvider(
+      process.env.POLYGON_AMOY_RPC_URL
+    );
+
+    // const clientWallet = new ethers.Wallet(
+    //   process.env.CL_PK as string,
+    //   provider
+    // );
+
+    const clientSign = clientWallet.connect(provider);
+
+    const receipt = await erc20ContractInstance.approve(clientSign, amount);
+
+    console.log("=======Approving Finish=======");
+
+    return res.status(200).json({
+      message: `성공적으로 PPT를 ${amount}만큼 Approve 했습니다.`,
+      receipt,
+    });
   } catch (error: any) {
     console.log(error);
     return res.status(400).json(badRequestBlockChain(error.reason));
