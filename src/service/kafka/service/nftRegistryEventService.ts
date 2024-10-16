@@ -26,6 +26,7 @@ const nftRegistryEventService = async (data: any) => {
       "SELECT wallet_address FROM wallet WHERE member_id = ?",
       [data.maker_id]
     )) as any;
+    console.log(walletAddress);
     const makerAddress = walletAddress[0][0].wallet_address;
 
     const res = await pinataTokenURIUploader(data);

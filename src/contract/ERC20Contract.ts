@@ -195,6 +195,11 @@ class ERC20Contract {
     return receipt;
   }
 
+  async getUserProjects(customerWalletAddress: string) {
+    const data = await this.contract?.getUserProjects(customerWalletAddress);
+    return data.toString();
+  }
+
   private async estimateGasForClient(
     clientSign: ethers.Wallet,
     data: any,

@@ -54,3 +54,52 @@ export const buyProject = async (req: Request, res: Response) => {
     return res.status(400).json(badRequestBlockChain(error.reason));
   }
 };
+
+export const projectBuyer = async (req: Request, res: Response) => {
+  try {
+    const { project_id } = req.body;
+    const existingWallet = (
+      await conn.execute("SELECT wallet_address, member_id FROM wallet")
+    )[0] as any;
+
+    const owners = [];
+    for (const query of existingWallet) {
+      const receipt = await erc20ContractInstance.getUserProjects(
+        query.wallet_address
+      );
+      for (const rec of receipt.split(",")) {
+        if (parseInt(rec) == project_id) {
+          owners.push(query);
+        }
+      }
+    }
+    const result = [];
+    for (const owner of owners) {
+      const ownerInfoList = (
+        await conn.execute(
+          `SELECT 
+             mc.name,
+             mc.email,
+             mc.address,
+             w.wallet_address
+           FROM 
+             member_cached mc
+           JOIN 
+             wallet w ON mc.member_id = w.member_id
+           WHERE 
+             mc.member_id = ?`,
+          [owner.member_id]
+        )
+      )[0] as any;
+
+      result.push(...ownerInfoList);
+    }
+    return res.status(200).json({
+      message: `프로젝트의 구매자 정보를 가져옵니다.`,
+      result,
+    });
+  } catch (error: any) {
+    console.log(error);
+    return res.status(400).json(badRequestBlockChain(error.reason));
+  }
+};

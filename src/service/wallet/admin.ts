@@ -46,6 +46,7 @@ export const mintPPToken = async (req: Request, res: Response) => {
     }
 
     console.log("=======Minting Start=======");
+    console.log(wallet_address);
 
     const receipt = await erc20ContractInstance.mint(wallet_address);
     console.log("=======Minting Finish=======");
