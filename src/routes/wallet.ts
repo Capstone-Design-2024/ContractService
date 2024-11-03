@@ -15,7 +15,7 @@ const router: Router = express.Router();
 router.post("/create", accessControl, walletGenerate);
 router.post("/mint", accessControl, mintPPToken);
 router.post("/balance", accessControl, getBalance);
-router.post("/contract", accessManager, getContractInfo);
+router.post("/contract", accessControl, getContractInfo);
 
 router.get("/", accessControl, getWalletAddress);
 router.get("/initialSupply", accessControl, initialSupplyAmount);
